@@ -58,7 +58,15 @@ const Right = styled.div`
   flex: 1;
   padding: 20px;
 `;
-const ContactItem = styled.div``;
+const ContactItem = styled.div`
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+`;
+
+const Payment = styled.img`
+  width: 50%;
+`;
 
 export const Footer = () => {
   return (
@@ -96,16 +104,17 @@ export const Footer = () => {
       <Right>
         <Title>Contact us</Title>
         <ContactItem>
-          <MapOutlinedIcon /> Direction 2200
+          <MapOutlinedIcon style={{ marginRight: "10px" }} /> Direction 2200
         </ContactItem>
         <ContactItem>
-          <LocalPhoneOutlinedIcon />
+          <LocalPhoneOutlinedIcon style={{ marginRight: "10px" }} />
           +54 112301232
         </ContactItem>
         <ContactItem>
-          <AlternateEmailOutlinedIcon />
+          <AlternateEmailOutlinedIcon style={{ marginRight: "10px" }} />
           contacto@email.com
         </ContactItem>
+        <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
       </Right>
     </Container>
   );
