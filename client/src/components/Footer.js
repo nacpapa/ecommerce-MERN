@@ -6,10 +6,12 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
 import styled from "styled-components";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   display: flex;
   padding: 20px 0;
+  ${mobile({ flexDirection: "column", alignItems: "center" })}
 `;
 const Left = styled.div`
   flex: 1;
@@ -39,6 +41,7 @@ const SocialIcon = styled.div`
 const Center = styled.div`
   flex: 1;
   padding: 20px;
+  ${mobile({ display: "none" })}
 `;
 const Title = styled.h3`
   margin-bottom: 30px;
