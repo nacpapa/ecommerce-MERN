@@ -27,16 +27,19 @@ export const categories = [
     id: 1,
     img: "https://hardzone.es/app/uploads-hardzone.es/2018/04/AMD-Ryzen-7-2700X-y-Ryzen-5-2600X-01.jpg?x=480&y=375&quality=40",
     title: "AMD RYZEN!",
+    cat: "unisex",
   },
   {
     id: 2,
     img: "https://www.intel.la/content/dam/www/global/badges/core-x-series-framed-badge-rwd.jpg.rendition.intel.web.480.270.jpg",
     title: "INTEL LOVERS",
+    cat: "tshirt",
   },
   {
     id: 3,
     img: "https://i.blogs.es/43c823/m1-1/1366_2000.jpg",
     title: "APPLE MAGIC",
+    cat: "men",
   },
 ];
 
