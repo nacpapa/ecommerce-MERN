@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Anouncement } from "../components/Anouncement";
 import { Footer } from "../components/Footer";
@@ -6,6 +6,13 @@ import { Navbar } from "../components/Navbar";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { mobile } from "../responsive";
+import { useSelect } from "@mui/base";
+import { useSelector } from "react-redux";
+import StripeCheckout from "react-stripe-checkout";
+import { userRequest } from "../requests";
+import { useNavigate } from "react-router-dom";
+
+const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
 
@@ -141,6 +148,25 @@ const Button = styled.button`
 `;
 
 export const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  let navigate = useNavigate();
+  const [stripeToken, setStripeToken] = useState(null);
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken,
+          amount: cart.total * 100,
+        });
+        navigate("/");
+        makeRequest();
+      } catch (error) {}
+    };
+  }, [stripeToken, cart.total, navigate]);
+
   return (
     <Container>
       <Navbar />
@@ -157,63 +183,44 @@ export const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://www.macstation.com.ar/img/productos/2616-1.jpg" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b>PC GAMER
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b>51457951
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size:</b>Tower
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddOutlinedIcon />
-                  <ProductAmount>1</ProductAmount>
-                  <RemoveOutlinedIcon />
-                </ProductAmountContainer>
-                <ProductPrice>$1200</ProductPrice>
-              </PriceDetail>
-            </Product>
+            {cart.products.map((product) => (
+              <Product>
+                <ProductDetail>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b>
+                      {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size:</b>
+                      {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <AddOutlinedIcon />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <RemoveOutlinedIcon />
+                  </ProductAmountContainer>
+                  <ProductPrice>
+                    $ {product.price * product.quantity}
+                  </ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://http2.mlstatic.com/D_NQ_NP_959904-MLA46639990306_072021-O.jpg" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> TABLET
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b>5234
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size:</b>Tower
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddOutlinedIcon />
-                  <ProductAmount>1</ProductAmount>
-                  <RemoveOutlinedIcon />
-                </ProductAmountContainer>
-                <ProductPrice>$900</ProductPrice>
-              </PriceDetail>
-            </Product>
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$1200</SummaryItemPrice>
+              <SummaryItemPrice>${cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -225,9 +232,21 @@ export const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$1200</SummaryItemPrice>
+              <SummaryItemPrice>${cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECK OUT NOW</Button>
+            <StripeCheckout
+              name="Ecommerce"
+              image="https://play-lh.googleusercontent.com/R9aVDHOYmDSxqJINTa-HFSurXTV3lDm4Nv7Rj7h1XGvGfjLry7-yblAYRjH-MTK9LYI"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+              // key={KEY}
+            >
+              <Button>CHECKOUT NOW</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>
