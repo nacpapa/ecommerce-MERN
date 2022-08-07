@@ -49,7 +49,7 @@ export const ProductList = () => {
     <Container>
       <Anouncement />
       <Navbar />
-      <Title>Dresses</Title>
+      <Title>{category}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>Filter products: </FilterText>
