@@ -68,7 +68,7 @@ router.get("/getall", async (req, res) => {
     } else {
       orders = await Order.find();
     }
-    res.status(200).json({ orders });
+    res.status(200).send(orders);
   } catch (err) {
     res.status(500).json(err);
   }
