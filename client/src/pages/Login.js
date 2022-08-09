@@ -44,7 +44,7 @@ const Button = styled.button`
   background-color: teal;
   color: white;
   cursor: pointer;
-  &: disabled {
+  &:disabled {
     color: grey;
     cursor: not-allowed;
   }
